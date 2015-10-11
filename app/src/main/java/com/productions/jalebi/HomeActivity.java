@@ -1,6 +1,7 @@
 package com.productions.jalebi;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,16 +20,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-/**
- * Landing page.
- * **/
 public class HomeActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ListItemFragment.OnFragmentInteractionListener {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -43,10 +40,29 @@ public class HomeActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
+        // Set up the drawer
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // Used to set our hamburger icon
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    }
+
+    // Supporting hamburger icon
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mActionBarDrawerToggle.syncState();
+    }
+
+    // Supporting hamburger icon
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -54,22 +70,8 @@ public class HomeActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, FragmentGenerator.newInstance(position))
                 .commit();
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
     }
 
     public void restoreActionBar() {
@@ -79,6 +81,9 @@ public class HomeActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
+    public void onSectionAttached(String title) {
+            mTitle = title;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,27 +113,43 @@ public class HomeActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    // Implementing ListItemFragment.OnFragmentInteractionListener methods
+    public void onListItemClick(String id) {
+        // TODO: Redirect to another ListItemFragment containing sub menu
+        // See http://developer.android.com/training/basics/fragments/communicating.html
+        // for fragment interaction with activities
+    }
+
+    /**
+     * FragmentGenerator used to create fragments corresponding to the Navigation Drawer List
+     */
+    public static class FragmentGenerator {
+
+        /**
+         * Returns the fragment corresponding to the listing in the navigation drawer list
+         * 0 - Featured Sweets
+         * 1 - Bakery Items
+         * 2 - Checkout
+         */
+        public static Fragment newInstance(int navDrawerEntryNumber) {
+            Fragment result;
+            switch(navDrawerEntryNumber) {
+                case 0:
+                    result = ListItemFragment.newInstance("Featured Sweets",
+                            new String[] { "Mantha Sweets", "Gabbar Singh Bakery", "Genelia Joint" });
+                break;
+                default:
+                    // Default placeholder fragment that shows nothing
+                    result = new PlaceholderFragment();
+            }
+            return result;
+        }
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
 
         public PlaceholderFragment() {
         }
@@ -138,13 +159,6 @@ public class HomeActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
             return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((HomeActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
 
