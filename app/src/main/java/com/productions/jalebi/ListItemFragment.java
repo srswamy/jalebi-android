@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.productions.jalebi.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
@@ -71,6 +70,10 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
         if (getArguments() != null) {
             mTitle = getArguments().getString(ARG_TITLE);
             mData = getArguments().getStringArray(ARG_DATA);
+            ((HomeActivity) getActivity()).updateTitle(mTitle);
+        } else {
+            mTitle = "";
+            mData = new String[] { };
         }
 
         if (mData.length != 0) {
@@ -101,7 +104,6 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            ((HomeActivity) activity).onSectionAttached(mTitle);
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()

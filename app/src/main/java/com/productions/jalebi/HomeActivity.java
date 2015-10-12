@@ -1,6 +1,7 @@
 package com.productions.jalebi;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -44,7 +45,6 @@ public class HomeActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
         // Used to set our hamburger icon
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -81,7 +81,7 @@ public class HomeActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-    public void onSectionAttached(String title) {
+    public void updateTitle(String title) {
             mTitle = title;
     }
 
@@ -104,11 +104,6 @@ public class HomeActivity extends ActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -137,6 +132,14 @@ public class HomeActivity extends ActionBarActivity
                 case 0:
                     result = ListItemFragment.newInstance("Featured Sweets",
                             new String[] { "Mantha Sweets", "Gabbar Singh Bakery", "Genelia Joint" });
+                break;
+                case 1:
+                    result = ListItemFragment.newInstance("Bakery Items",
+                            new String[] { "Test data1", "Test data2", "Test data3" });
+                break;
+                case 2:
+                    result = ListItemFragment.newInstance("Checkout",
+                            new String[] { "Credit", "Debit", "Cash"});
                 break;
                 default:
                     // Default placeholder fragment that shows nothing
