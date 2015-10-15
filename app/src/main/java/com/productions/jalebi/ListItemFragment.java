@@ -1,6 +1,7 @@
 package com.productions.jalebi;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -31,7 +34,7 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
 
     // TODO: Rename and change types of parameters
     private String mTitle;
-    private String[] mData;
+    private ArrayList<SweetShop> mData;
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,11 +50,11 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static ListItemFragment newInstance(String title, String[] data) {
+    public static ListItemFragment newInstance(String title, ArrayList<SweetShop> data) {
         ListItemFragment fragment = new ListItemFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
-        args.putStringArray(ARG_DATA, data);
+        args.putParcelableArrayList(ARG_DATA, data);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,17 +72,29 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
 
         if (getArguments() != null) {
             mTitle = getArguments().getString(ARG_TITLE);
-            mData = getArguments().getStringArray(ARG_DATA);
+            mData = getArguments().getParcelableArrayList(ARG_DATA);
             ((HomeActivity) getActivity()).updateTitle(mTitle);
         } else {
             mTitle = "";
-            mData = new String[] { };
+            mData = new ArrayList<SweetShop>();
         }
 
-        if (mData.length != 0) {
+        if (!mData.isEmpty()) {
             // TODO: Change Adapter to display your content
-            mAdapter = new ArrayAdapter<>(getActivity(),
-                    android.R.layout.simple_list_item_1, android.R.id.text1, mData);
+            mAdapter = new ArrayAdapter(getActivity(),
+                    android.R.layout.simple_list_item_2, android.R.id.text1, mData) {
+
+                public View getView(int position, View view, ViewGroup parent) {
+                    View v = super.getView(position, view, parent);
+                    TextView text1 = (TextView) v.findViewById(android.R.id.text1);
+                    TextView text2 = (TextView) v.findViewById(android.R.id.text2);
+                    text1.setText(mData.get(position).getStoreName());
+                    text2.setText(mData.get(position).getLocation());
+                    text2.setAllCaps(true);
+                    text2.setTypeface(null, Typeface.ITALIC);
+                    return v;
+                }
+            };
         } else {
             setEmptyText(getText(R.string.list_item_fragment_empty_msg));
         }
