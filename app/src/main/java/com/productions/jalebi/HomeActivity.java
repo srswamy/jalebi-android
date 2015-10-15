@@ -21,6 +21,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ListItemFragment.OnFragmentInteractionListener {
 
@@ -128,18 +130,25 @@ public class HomeActivity extends ActionBarActivity
          */
         public static Fragment newInstance(int navDrawerEntryNumber) {
             Fragment result;
+            ArrayList<SweetShop> list = new ArrayList<SweetShop>();
             switch(navDrawerEntryNumber) {
                 case 0:
-                    result = ListItemFragment.newInstance("Featured Sweets",
-                            new String[] { "Mantha Sweets", "Gabbar Singh Bakery", "Genelia Joint" });
+                    list.add(new SweetShop("Mantha Sweets", "1 Mi"));
+                    list.add(new SweetShop("Gabbar Singh Bakery", "3 Mi"));
+                    list.add(new SweetShop("Genelia Joint", "7 Mi"));
+                    result = ListItemFragment.newInstance("Featured Sweets", list);
                 break;
                 case 1:
-                    result = ListItemFragment.newInstance("Bakery Items",
-                            new String[] { "Test data1", "Test data2", "Test data3" });
+                    list.add(new SweetShop("Test 1", "1 Mi"));
+                    list.add(new SweetShop("Test Bakery", "3 Mi"));
+                    list.add(new SweetShop("Test Joint", "7 Mi"));
+                    result = ListItemFragment.newInstance("Bakery Items", list);
                 break;
                 case 2:
-                    result = ListItemFragment.newInstance("Checkout",
-                            new String[] { "Credit", "Debit", "Cash"});
+                    list.add(new SweetShop("Credit", ""));
+                    list.add(new SweetShop("Debit", ""));
+                    list.add(new SweetShop("Cash", ""));
+                    result = ListItemFragment.newInstance("Checkout", list);
                 break;
                 default:
                     // Default placeholder fragment that shows nothing
