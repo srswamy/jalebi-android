@@ -76,10 +76,10 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
             ((HomeActivity) getActivity()).updateTitle(mTitle);
         } else {
             mTitle = "";
-            mData = new ArrayList<SweetShop>();
+            mData = new ArrayList();
         }
 
-        if (!mData.isEmpty()) {
+        if ((mData != null) && !mData.isEmpty()) {
             // TODO: Change Adapter to display your content
             mAdapter = new ArrayAdapter(getActivity(),
                     android.R.layout.simple_list_item_2, android.R.id.text1, mData) {
@@ -95,8 +95,6 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
                     return v;
                 }
             };
-        } else {
-            setEmptyText(getText(R.string.list_item_fragment_empty_msg));
         }
     }
 
@@ -107,10 +105,14 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        if (mAdapter != null) {
+            ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
+            // Set OnItemClickListener so we can be notified on item clicks
+            mListView.setOnItemClickListener(this);
+        } else {
+            setEmptyText(getText(R.string.list_item_fragment_empty_msg));
+        }
 
         return view;
     }

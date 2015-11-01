@@ -3,6 +3,7 @@ package com.productions.jalebi;
 import android.app.Activity;
 import android.app.LauncherActivity;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -72,7 +73,7 @@ public class HomeActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentGenerator.newInstance(position))
+                .replace(R.id.container, FragmentGenerator.newInstance(position, getApplicationContext()))
                 .commit();
     }
 
@@ -128,27 +129,34 @@ public class HomeActivity extends ActionBarActivity
          * 1 - Bakery Items
          * 2 - Checkout
          */
-        public static Fragment newInstance(int navDrawerEntryNumber) {
+        public static Fragment newInstance(int navDrawerEntryNumber, Context context) {
             Fragment result;
-            ArrayList<SweetShop> list = new ArrayList<SweetShop>();
+            ArrayList<SweetShop> list = new ArrayList();
+            Resources resources = context.getResources();
             switch(navDrawerEntryNumber) {
                 case 0:
                     list.add(new SweetShop("Mantha Sweets", "1 Mi"));
                     list.add(new SweetShop("Gabbar Singh Bakery", "3 Mi"));
                     list.add(new SweetShop("Genelia Joint", "7 Mi"));
-                    result = ListItemFragment.newInstance("Featured Sweets", list);
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section1), list);
                 break;
                 case 1:
-                    list.add(new SweetShop("Test 1", "1 Mi"));
-                    list.add(new SweetShop("Test Bakery", "3 Mi"));
-                    list.add(new SweetShop("Test Joint", "7 Mi"));
-                    result = ListItemFragment.newInstance("Bakery Items", list);
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section2), null);
                 break;
                 case 2:
-                    list.add(new SweetShop("Credit", ""));
-                    list.add(new SweetShop("Debit", ""));
-                    list.add(new SweetShop("Cash", ""));
-                    result = ListItemFragment.newInstance("Checkout", list);
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section3), null);
+                break;
+                case 3:
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section4), null);
+                break;
+                case 4:
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section5), null);
+                break;
+                case 5:
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section6), null);
+                break;
+                case 6:
+                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section7), null);
                 break;
                 default:
                     // Default placeholder fragment that shows nothing
