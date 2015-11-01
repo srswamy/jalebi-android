@@ -72,8 +72,9 @@ public class HomeActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
+        ListItemFragment fragment = new ListItemFragment();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentGenerator.newInstance(position, getApplicationContext()))
+                .replace(R.id.container, fragment.newInstance(position, getApplicationContext()))
                 .commit();
     }
 
@@ -116,54 +117,6 @@ public class HomeActivity extends ActionBarActivity
         // TODO: Redirect to another ListItemFragment containing sub menu
         // See http://developer.android.com/training/basics/fragments/communicating.html
         // for fragment interaction with activities
-    }
-
-    /**
-     * FragmentGenerator used to create fragments corresponding to the Navigation Drawer List
-     */
-    public static class FragmentGenerator {
-
-        /**
-         * Returns the fragment corresponding to the listing in the navigation drawer list
-         * 0 - Featured Sweets
-         * 1 - Bakery Items
-         * 2 - Checkout
-         */
-        public static Fragment newInstance(int navDrawerEntryNumber, Context context) {
-            Fragment result;
-            ArrayList<SweetShop> list = new ArrayList();
-            Resources resources = context.getResources();
-            switch(navDrawerEntryNumber) {
-                case 0:
-                    list.add(new SweetShop("Mantha Sweets", "1 Mi"));
-                    list.add(new SweetShop("Gabbar Singh Bakery", "3 Mi"));
-                    list.add(new SweetShop("Genelia Joint", "7 Mi"));
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section1), list);
-                break;
-                case 1:
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section2), null);
-                break;
-                case 2:
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section3), null);
-                break;
-                case 3:
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section4), null);
-                break;
-                case 4:
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section5), null);
-                break;
-                case 5:
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section6), null);
-                break;
-                case 6:
-                    result = ListItemFragment.newInstance(resources.getString(R.string.title_section7), null);
-                break;
-                default:
-                    // Default placeholder fragment that shows nothing
-                    result = new PlaceholderFragment();
-            }
-            return result;
-        }
     }
 
     /**

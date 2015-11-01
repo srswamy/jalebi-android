@@ -1,6 +1,9 @@
 package com.productions.jalebi;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +13,21 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -31,10 +47,11 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_TITLE = "title";
     private static final String ARG_DATA = "data";
+    private static final String BASE_URL = "http://10.0.0.9:3000/api/v1/";
 
     // TODO: Rename and change types of parameters
     private String mTitle;
-    private ArrayList<SweetShop> mData;
+    private ArrayList<Store> mData;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,13 +67,89 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static ListItemFragment newInstance(String title, ArrayList<SweetShop> data) {
-        ListItemFragment fragment = new ListItemFragment();
+    public Fragment newInstance(int navDrawerEntryNumber, Context context) {
+        Resources resources = context.getResources();
+        Fragment fragment;
         Bundle args = new Bundle();
-        args.putString(ARG_TITLE, title);
-        args.putParcelableArrayList(ARG_DATA, data);
+
+        switch(navDrawerEntryNumber) {
+            case 0:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section1));
+                args.putParcelableArrayList(ARG_DATA, new ArrayList<Store>());
+                break;
+            case 1:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section2));
+                args.putParcelableArrayList(ARG_DATA, null);
+                break;
+            case 2:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section3));
+                args.putParcelableArrayList(ARG_DATA, null);
+                break;
+            case 3:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section4));
+                args.putParcelableArrayList(ARG_DATA, null);
+                break;
+            case 4:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section5));
+                args.putParcelableArrayList(ARG_DATA, null);
+                break;
+            case 5:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section6));
+                args.putParcelableArrayList(ARG_DATA, null);
+                break;
+            case 6:
+                fragment = new ListItemFragment();
+                args.putString(ARG_TITLE, resources.getString(R.string.title_section7));
+                args.putParcelableArrayList(ARG_DATA, null);
+                break;
+            default:
+                fragment = new HomeActivity.PlaceholderFragment();
+        }
+
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void handleData(String url, Context context) {
+        //final ProgressDialog dialog = new ProgressDialog(context);
+        //dialog.setMessage("Loading...");
+        //dialog.show();
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                parseJSONResponse(response);
+                //dialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Proper error messaging
+                error.printStackTrace();
+            }
+        });
+        queue.add(jsonRequest);
+    }
+
+    private void parseJSONResponse(JSONArray response) {
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject obj = (JSONObject) response.get(i);
+                Store store = new Store(obj.getString("name"), "1MI");
+                mData.add(store);
+                ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+            }
+        } catch (JSONException e) {
+            // TODO: Proper exception handling + error messaging
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -79,7 +172,7 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
             mData = new ArrayList();
         }
 
-        if ((mData != null) && !mData.isEmpty()) {
+        if (mData != null) {
             // TODO: Change Adapter to display your content
             mAdapter = new ArrayAdapter(getActivity(),
                     android.R.layout.simple_list_item_2, android.R.id.text1, mData) {
@@ -95,6 +188,8 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
                     return v;
                 }
             };
+
+            handleData(BASE_URL + "stores", getActivity().getApplicationContext());
         }
     }
 

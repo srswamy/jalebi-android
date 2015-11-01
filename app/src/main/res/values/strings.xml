@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Jalebi</string>
-    <string name="title_section1">Featured Sweets</string>
+    <string name="title_section1">Featured Stores</string>
     <string name="title_section2">Deliveries</string>
     <string name="title_section3">Account Details</string>
     <string name="title_section4">Invite Friends</string>
