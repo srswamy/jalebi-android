@@ -3,6 +3,7 @@ package com.productions.jalebi;
 import android.app.Activity;
 import android.app.LauncherActivity;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -71,8 +72,9 @@ public class HomeActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
+        ListItemFragment fragment = new ListItemFragment();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, FragmentGenerator.newInstance(position))
+                .replace(R.id.container, fragment.newInstance(position, getApplicationContext()))
                 .commit();
     }
 
@@ -115,47 +117,6 @@ public class HomeActivity extends ActionBarActivity
         // TODO: Redirect to another ListItemFragment containing sub menu
         // See http://developer.android.com/training/basics/fragments/communicating.html
         // for fragment interaction with activities
-    }
-
-    /**
-     * FragmentGenerator used to create fragments corresponding to the Navigation Drawer List
-     */
-    public static class FragmentGenerator {
-
-        /**
-         * Returns the fragment corresponding to the listing in the navigation drawer list
-         * 0 - Featured Sweets
-         * 1 - Bakery Items
-         * 2 - Checkout
-         */
-        public static Fragment newInstance(int navDrawerEntryNumber) {
-            Fragment result;
-            ArrayList<SweetShop> list = new ArrayList<SweetShop>();
-            switch(navDrawerEntryNumber) {
-                case 0:
-                    list.add(new SweetShop("Mantha Sweets", "1 Mi"));
-                    list.add(new SweetShop("Gabbar Singh Bakery", "3 Mi"));
-                    list.add(new SweetShop("Genelia Joint", "7 Mi"));
-                    result = ListItemFragment.newInstance("Featured Sweets", list);
-                break;
-                case 1:
-                    list.add(new SweetShop("Test 1", "1 Mi"));
-                    list.add(new SweetShop("Test Bakery", "3 Mi"));
-                    list.add(new SweetShop("Test Joint", "7 Mi"));
-                    result = ListItemFragment.newInstance("Bakery Items", list);
-                break;
-                case 2:
-                    list.add(new SweetShop("Credit", ""));
-                    list.add(new SweetShop("Debit", ""));
-                    list.add(new SweetShop("Cash", ""));
-                    result = ListItemFragment.newInstance("Checkout", list);
-                break;
-                default:
-                    // Default placeholder fragment that shows nothing
-                    result = new PlaceholderFragment();
-            }
-            return result;
-        }
     }
 
     /**

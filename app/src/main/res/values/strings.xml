@@ -2,9 +2,13 @@
 <resources>
 
     <string name="app_name">Jalebi</string>
-    <string name="title_section1">Featured Sweets</string>
-    <string name="title_section2">Bakery Items</string>
-    <string name="title_section3">Checkout</string>
+    <string name="title_section1">Featured Stores</string>
+    <string name="title_section2">Deliveries</string>
+    <string name="title_section3">Account Details</string>
+    <string name="title_section4">Invite Friends</string>
+    <string name="title_section5">Enter Promo Code</string>
+    <string name="title_section6">Support</string>
+    <string name="title_section7">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

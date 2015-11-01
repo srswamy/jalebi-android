@@ -6,30 +6,30 @@ import android.os.Parcelable;
 /**
  * Created by sathvik on 10/14/2015.
  */
-public class SweetShop implements Parcelable {
+public class Store implements Parcelable {
 
     private String storeName;
     private String location;
 
     // TODO: Will add more fields as we move forward
 
-    public SweetShop(String storeName, String location) {
+    public Store(String storeName, String location) {
         this.storeName = storeName;
         this.location = location;
     }
 
-    public SweetShop(Parcel input) {
+    public Store(Parcel input) {
         super();
         readFromParcel(input);
     }
 
-    public static final Parcelable.Creator<SweetShop> CREATOR = new Parcelable.Creator<SweetShop>() {
-        public SweetShop createFromParcel(Parcel input) {
-            return new SweetShop(input);
+    public static final Parcelable.Creator<Store> CREATOR = new Parcelable.Creator<Store>() {
+        public Store createFromParcel(Parcel input) {
+            return new Store(input);
         }
 
-        public SweetShop[] newArray(int size) {
-            return new SweetShop[size];
+        public Store[] newArray(int size) {
+            return new Store[size];
         }
     };
 
