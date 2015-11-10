@@ -8,12 +8,14 @@ import android.os.Parcelable;
  */
 public class Store implements Parcelable {
 
+    private int storeId;
     private String storeName;
     private String location;
 
     // TODO: Will add more fields as we move forward
 
-    public Store(String storeName, String location) {
+    public Store(int storeId, String storeName, String location) {
+        this.storeId = storeId;
         this.storeName = storeName;
         this.location = location;
     }
@@ -47,6 +49,8 @@ public class Store implements Parcelable {
         dest.writeString(location);
     }
 
+    public int getStoreId() { return storeId; }
+
     public String getStoreName() {
         return storeName;
     }
@@ -62,4 +66,6 @@ public class Store implements Parcelable {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public void setStoreId(int id) { this.storeId = id; }
 }

@@ -1,31 +1,21 @@
 package com.productions.jalebi;
 
-import android.app.Activity;
-import android.app.LauncherActivity;
 import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 public class HomeActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ListItemFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ListItemFragment.OnFragmentInteractionListener, MenuSectionFragment.OnFragmentInteractionListener {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -75,6 +65,7 @@ public class HomeActivity extends ActionBarActivity
         ListItemFragment fragment = new ListItemFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment.newInstance(position, getApplicationContext()))
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -112,11 +103,22 @@ public class HomeActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // Implementing ListItemFragment.OnFragmentInteractionListener methods
-    public void onListItemClick(String id) {
+    // Implementing ListItemFragment.OnFragmentInteractionListener method
+    public void onListItemClick(String requestUrl) {
         // TODO: Redirect to another ListItemFragment containing sub menu
         // See http://developer.android.com/training/basics/fragments/communicating.html
         // for fragment interaction with activities
+
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+            .replace(R.id.container, MenuSectionFragment.newInstance(requestUrl))
+            .addToBackStack(null)
+            .commit();
+    }
+
+    // Implementing MenuSectionFragment.OnFragmentInteractionListener method
+    public void onMenuSectionClick(String requestUrl) {
+        // TODO: Finish implementation
     }
 
     /**

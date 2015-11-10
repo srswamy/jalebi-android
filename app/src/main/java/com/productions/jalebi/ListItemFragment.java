@@ -1,7 +1,6 @@
 package com.productions.jalebi;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -22,7 +21,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -42,14 +40,10 @@ import java.util.ArrayList;
  * interface.
  */
 public class ListItemFragment extends Fragment implements AbsListView.OnItemClickListener {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_TITLE = "title";
     private static final String ARG_DATA = "data";
-    private static final String BASE_URL = "http://10.0.0.9:3000/api/v1/";
+    private static final String BASE_URL = "http://10.0.0.17:3000/api/v1/";
 
-    // TODO: Rename and change types of parameters
     private String mTitle;
     private ArrayList<Store> mData;
 
@@ -117,16 +111,11 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     }
 
     private void handleData(String url, Context context) {
-        //final ProgressDialog dialog = new ProgressDialog(context);
-        //dialog.setMessage("Loading...");
-        //dialog.show();
-
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 parseJSONResponse(response);
-                //dialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -142,7 +131,8 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
         try {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject obj = (JSONObject) response.get(i);
-                Store store = new Store(obj.getString("name"), "1MI");
+                // TODO: Update location information
+                Store store = new Store(obj.getInt("id"), obj.getString("name"), "1MI");
                 mData.add(store);
                 ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
             }
@@ -173,7 +163,6 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
         }
 
         if (mData != null) {
-            // TODO: Change Adapter to display your content
             mAdapter = new ArrayAdapter(getActivity(),
                     android.R.layout.simple_list_item_2, android.R.id.text1, mData) {
 
@@ -233,10 +222,8 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            // TODO: Replace with expected behavior
-            mListener.onListItemClick("Nothing");
+            // Pass the next URL
+            mListener.onListItemClick(BASE_URL + "stores/" + mData.get(position).getStoreId() + "/menu_sections");
         }
     }
 
@@ -265,7 +252,7 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onListItemClick(String id);
+        public void onListItemClick(String requestUrl);
     }
 
 
