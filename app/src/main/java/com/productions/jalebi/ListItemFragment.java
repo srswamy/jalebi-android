@@ -42,7 +42,6 @@ import java.util.ArrayList;
 public class ListItemFragment extends Fragment implements AbsListView.OnItemClickListener {
     private static final String ARG_TITLE = "title";
     private static final String ARG_DATA = "data";
-    private static final String BASE_URL = "http://10.0.0.17:3000/api/v1/";
 
     private String mTitle;
     private ArrayList<Store> mData;
@@ -178,7 +177,7 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
                 }
             };
 
-            handleData(BASE_URL + "stores", getActivity().getApplicationContext());
+            handleData(HomeActivity.BASE_URL + "stores", getActivity().getApplicationContext());
         }
     }
 
@@ -223,7 +222,7 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
             // Pass the next URL
-            mListener.onListItemClick(BASE_URL + "stores/" + mData.get(position).getStoreId() + "/menu_sections");
+            mListener.onListItemClick(HomeActivity.BASE_URL + "stores/" + mData.get(position).getStoreId() + "/menu_sections");
         }
     }
 

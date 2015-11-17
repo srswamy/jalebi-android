@@ -1,6 +1,7 @@
 package com.productions.jalebi;
 
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -15,8 +16,9 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 public class HomeActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ListItemFragment.OnFragmentInteractionListener, MenuSectionFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ListItemFragment.OnFragmentInteractionListener, MenuSectionFragment.OnFragmentInteractionListener, ItemViewFragment.OnFragmentInteractionListener, MenuItemsFragment.OnFragmentInteractionListener {
 
+    public static final String BASE_URL = "http://10.0.0.147:3000/api/v1/";
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
@@ -104,8 +106,8 @@ public class HomeActivity extends ActionBarActivity
     }
 
     // Implementing ListItemFragment.OnFragmentInteractionListener method
+    // When you click on a store, we trigger the Menu Section fragment to load
     public void onListItemClick(String requestUrl) {
-        // TODO: Redirect to another ListItemFragment containing sub menu
         // See http://developer.android.com/training/basics/fragments/communicating.html
         // for fragment interaction with activities
 
@@ -117,8 +119,25 @@ public class HomeActivity extends ActionBarActivity
     }
 
     // Implementing MenuSectionFragment.OnFragmentInteractionListener method
+    // When you click on the Menu Section for a particular store, we trigger the Item View to load
     public void onMenuSectionClick(String requestUrl) {
-        // TODO: Finish implementation
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+            .replace(R.id.container, MenuItemsFragment.newInstance(requestUrl))
+            .addToBackStack(null)
+            .commit();
+    }
+
+    public void onMenuItemClick(String requestUrl) {
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, ItemViewFragment.newInstance(requestUrl))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void onItemViewInteraction(Uri uri) {
+        // TODO: Do something
     }
 
     /**

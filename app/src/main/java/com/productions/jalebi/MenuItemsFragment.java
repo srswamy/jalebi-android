@@ -37,12 +37,10 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class MenuSectionFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class MenuItemsFragment extends Fragment implements AbsListView.OnItemClickListener {
     private static final String ARG_REQUEST_URL = "requestUrl";
-
     private String mRequestUrl;
-    private ArrayList<Section> mData = new ArrayList<>();
-
+    private ArrayList<Item> mData = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -56,8 +54,9 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
      */
     private ListAdapter mAdapter;
 
-    public static MenuSectionFragment newInstance(String requestUrl) {
-        MenuSectionFragment fragment = new MenuSectionFragment();
+    // TODO: Rename and change types of parameters
+    public static MenuItemsFragment newInstance(String requestUrl) {
+        MenuItemsFragment fragment = new MenuItemsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_REQUEST_URL, requestUrl);
         fragment.setArguments(args);
@@ -68,7 +67,7 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public MenuSectionFragment() {
+    public MenuItemsFragment() {
     }
 
     @Override
@@ -85,18 +84,18 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
             public View getView(int position, View view, ViewGroup parent) {
                 View v = super.getView(position, view, parent);
                 TextView text1 = (TextView) v.findViewById(android.R.id.text1);
-                text1.setText(mData.get(position).getSectionName());
+                text1.setText(mData.get(position).getName());
                 return v;
             }
         };
 
-         handleData(mRequestUrl, getActivity().getApplicationContext());
+        handleData(mRequestUrl, getActivity().getApplicationContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menusection, container, false);
+        View view = inflater.inflate(R.layout.fragment_item, container, false);
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
@@ -125,29 +124,6 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
         mListener = null;
     }
 
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onMenuSectionClick(mRequestUrl + "/" + mData.get(position).getSectionId() + "/menu_items");
-        }
-    }
-
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
-
     private void handleData(String url, Context context) {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -169,14 +145,36 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
         try {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject obj = (JSONObject) response.get(i);
-                // TODO: Update location information
-                Section section = new Section(obj.getInt("id"), obj.getString("name"));
-                mData.add(section);
+                // TODO: Update unit information once API makes it available
+                Item item = new Item(obj.getInt("id"), obj.getString("name"), obj.getString("description"), obj.getInt("price"), "default");
+                mData.add(item);
                 ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
             }
         } catch (JSONException e) {
             // TODO: Proper exception handling + error messaging
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (null != mListener) {
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+            mListener.onMenuItemClick(mRequestUrl + "/" + mData.get(position).getId());
+        }
+    }
+
+    /**
+     * The default content for this Fragment has a TextView that is shown when
+     * the list is empty. If you would like to change the text, call this method
+     * to supply the text it should use.
+     */
+    public void setEmptyText(CharSequence emptyText) {
+        View emptyView = mListView.getEmptyView();
+
+        if (emptyView instanceof TextView) {
+            ((TextView) emptyView).setText(emptyText);
         }
     }
 
@@ -191,7 +189,7 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onMenuSectionClick(String requestUrl);
+        public void onMenuItemClick(String requestUrl);
     }
 
 }
