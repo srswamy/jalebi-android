@@ -1,8 +1,28 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.productions.jalebi.ItemViewFragment">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.productions.jalebi.ItemViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:id="@+id/item_view_textview" android:layout_width="match_parent" android:layout_height="match_parent" android:text="Change me." />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_view_title">
+        <TextView
+            android:id="@+id/item_view_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"/>
+        <TextView
+            android:id="@+id/item_view_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <TextView android:id="@+id/item_view_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
-</FrameLayout>
+</LinearLayout>
