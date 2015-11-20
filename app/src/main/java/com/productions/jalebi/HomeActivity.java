@@ -128,10 +128,10 @@ public class HomeActivity extends ActionBarActivity
             .commit();
     }
 
-    public void onMenuItemClick(String requestUrl) {
+    public void onMenuItemClick(Item selectedItem) {
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, ItemViewFragment.newInstance(requestUrl))
+                .replace(R.id.container, ItemViewFragment.newInstance(selectedItem))
                 .addToBackStack(null)
                 .commit();
     }

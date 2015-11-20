@@ -2,6 +2,7 @@ package com.productions.jalebi;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -33,27 +35,25 @@ import org.w3c.dom.Text;
  * create an instance of this fragment.
  */
 
-// The final Item view
-public class ItemViewFragment extends Fragment {
+public class ItemViewFragment extends Fragment implements View.OnClickListener {
 
-    private static final String ARG_REQUEST_URL = "requestUrl";
-    private String mRequestUrl;
+    private static Item selectedItem;
     private OnFragmentInteractionListener mListener;
+    private static final String ARG_SELECTED_ITEM = "selectedItem";
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param requestUrl
-     *      Request URL for populating aspects of this fragment.
+     * @param selectedItem
+     *      Item that was selected in the previous Items list.
      * @return
      *      A new instance of fragment ItemViewFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ItemViewFragment newInstance(String requestUrl) {
+    public static ItemViewFragment newInstance(Item selectedItem) {
         ItemViewFragment fragment = new ItemViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_REQUEST_URL, requestUrl);
+        args.putParcelable(ARG_SELECTED_ITEM, selectedItem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +66,7 @@ public class ItemViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mRequestUrl = getArguments().getString(ARG_REQUEST_URL);
+            selectedItem = getArguments().getParcelable(ARG_SELECTED_ITEM);
         }
     }
 
@@ -74,7 +74,56 @@ public class ItemViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_item_view, container, false);
+        View v = inflater.inflate(R.layout.fragment_item_view, container, false);
+        if (selectedItem != null) {
+            TextView nameTextView = (TextView) v.findViewById(R.id.item_view_name);
+            nameTextView.setText(selectedItem.getName());
+
+            TextView priceTextView = (TextView) v.findViewById(R.id.item_view_price);
+            priceTextView.setText("Rs-/ " + selectedItem.getPrice() + "/" + selectedItem.getPriceUnit());
+
+            TextView descTextView = (TextView) v.findViewById(R.id.item_view_description);
+            descTextView.setText(selectedItem.getDescription());
+        }
+
+        // ------------ Custom Number Picker ---------------
+        // Set default value of zero for the order value
+        TextView orderValue = (TextView) v.findViewById(R.id.item_view_order_value);
+        orderValue.setText("0");
+        // Get controls
+        Button incrementButton = (Button) v.findViewById(R.id.item_view_order_increment);
+        Button decrementButton = (Button) v.findViewById(R.id.item_view_order_decrement);
+        // Register onClickListeners:
+        incrementButton.setOnClickListener(this);
+        decrementButton.setOnClickListener(this);
+
+        return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        TextView orderValue;
+        int numericValue;
+
+        switch(v.getId()) {
+            case R.id.item_view_order_decrement:
+                // Increment the value held by the TextView
+                orderValue = (TextView) getActivity().findViewById(R.id.item_view_order_value);
+                numericValue = Integer.parseInt(orderValue.getText().toString());
+                numericValue++;
+                orderValue.setText(""+numericValue);
+                break;
+
+            case R.id.item_view_order_increment:
+                // Decrement the value held by the TextView (only if it is > 0)
+                orderValue = (TextView) getActivity().findViewById(R.id.item_view_order_value);
+                numericValue = Integer.parseInt(orderValue.getText().toString());
+                if (numericValue > 0) {
+                    numericValue--;
+                }
+                orderValue.setText(""+numericValue);
+                break;
+        }
     }
 
     @Override

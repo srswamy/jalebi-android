@@ -145,8 +145,7 @@ public class MenuItemsFragment extends Fragment implements AbsListView.OnItemCli
         try {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject obj = (JSONObject) response.get(i);
-                // TODO: Update unit information once API makes it available
-                Item item = new Item(obj.getInt("id"), obj.getString("name"), obj.getString("description"), obj.getInt("price"), "default");
+                Item item = new Item(obj.getInt("id"), obj.getString("name"), obj.getString("description"), obj.getInt("price"), obj.getJSONObject("unit").getString("name"));
                 mData.add(item);
                 ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
             }
@@ -161,7 +160,8 @@ public class MenuItemsFragment extends Fragment implements AbsListView.OnItemCli
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onMenuItemClick(mRequestUrl + "/" + mData.get(position).getId());
+           // mListener.onMenuItemClick(mRequestUrl + "/" + mData.get(position).getId());
+            mListener.onMenuItemClick(mData.get(position));
         }
     }
 
@@ -189,7 +189,7 @@ public class MenuItemsFragment extends Fragment implements AbsListView.OnItemCli
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onMenuItemClick(String requestUrl);
+        public void onMenuItemClick(Item selectedItem);
     }
 
 }
