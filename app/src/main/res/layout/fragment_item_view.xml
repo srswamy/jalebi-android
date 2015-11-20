@@ -1,28 +1,81 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.productions.jalebi.ItemViewFragment">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/item_view_title">
-        <TextView
-            android:id="@+id/item_view_name"
-            android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"/>
-        <TextView
-            android:id="@+id/item_view_price"
-            android:layout_width="wrap_content"
+            android:id="@+id/item_view_title"
+            android:layout_margin="10dip"
+            android:layout_marginLeft="15dip">
+            <TextView
+                android:id="@+id/item_view_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textSize="11pt"/>
+            <TextView
+                android:id="@+id/item_view_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textSize="8pt"
+                android:padding="5dip"
+                android:textColor="@color/LightSeaGreen"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+        <TextView android:id="@+id/item_view_description"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-    <TextView android:id="@+id/item_view_description"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+            android:textSize="8pt"
+            android:textStyle="italic"
+            android:layout_margin="5dip"
+            android:paddingLeft="20dip"/>
+    </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_view_order_container"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/LightSeaGreen">
+        <Button
+            android:id="@+id/item_view_order_increment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dip"
+            android:drawableRight="@drawable/ic_chevron_left_white"
+            android:background="@android:color/transparent"/>
+        <TextView
+            android:id="@+id/item_view_order_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dip"
+            android:textSize="8pt"
+            android:textColor="@color/WhiteSmoke"/>
+        <Button
+            android:id="@+id/item_view_order_decrement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_chevron_right_white"
+            android:background="@android:color/transparent"/>
+        <Button
+            android:id="@+id/item_view_order_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="8pt"
+            android:text="@string/item_view_order"
+            android:textColor="@color/WhiteSmoke"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+</RelativeLayout>
