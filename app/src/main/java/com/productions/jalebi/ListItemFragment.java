@@ -128,12 +128,16 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
 
     private void parseJSONResponse(JSONArray response) {
         try {
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject obj = (JSONObject) response.get(i);
-                // TODO: Update location information
-                Store store = new Store(obj.getInt("id"), obj.getString("name"), "1MI");
-                mData.add(store);
-                ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+            if (response.length() != 0) {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject obj = (JSONObject) response.get(i);
+                    // TODO: Update location information
+                    Store store = new Store(obj.getInt("id"), obj.getString("name"), "1MI");
+                    mData.add(store);
+                    ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+                }
+            } else {
+                setEmptyText(getResources().getText(R.string.stores_list_empty));
             }
         } catch (JSONException e) {
             // TODO: Proper exception handling + error messaging
@@ -188,14 +192,13 @@ public class ListItemFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
-        if (mAdapter != null) {
-            ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
-            // Set OnItemClickListener so we can be notified on item clicks
-            mListView.setOnItemClickListener(this);
-        } else {
-            setEmptyText(getText(R.string.list_item_fragment_empty_msg));
-        }
+        // Set OnItemClickListener so we can be notified on item clicks
+        mListView.setOnItemClickListener(this);
+
+        // Set listview empty view
+        mListView.setEmptyView(view.findViewById(android.R.id.empty));
 
         return view;
     }

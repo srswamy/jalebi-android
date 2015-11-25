@@ -104,6 +104,9 @@ public class MenuItemsFragment extends Fragment implements AbsListView.OnItemCli
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+        // Set listview empty view
+        mListView.setEmptyView(view.findViewById(android.R.id.empty));
+
         return view;
     }
 
@@ -143,11 +146,15 @@ public class MenuItemsFragment extends Fragment implements AbsListView.OnItemCli
 
     private void parseJSONResponse(JSONArray response) {
         try {
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject obj = (JSONObject) response.get(i);
-                Item item = new Item(obj.getInt("id"), obj.getString("name"), obj.getString("description"), obj.getInt("price"), obj.getJSONObject("unit").getString("name"));
-                mData.add(item);
-                ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+            if (response.length() != 0) {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject obj = (JSONObject) response.get(i);
+                    Item item = new Item(obj.getInt("id"), obj.getString("name"), obj.getString("description"), obj.getInt("price"), obj.getJSONObject("unit").getString("name"));
+                    mData.add(item);
+                    ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+                }
+            } else {
+                setEmptyText(getResources().getText(R.string.item_list_empty));
             }
         } catch (JSONException e) {
             // TODO: Proper exception handling + error messaging

@@ -13,8 +13,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    <string name="list_item_fragment_empty_msg">"Sorry, no data was found."</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="item_view_order">Order</string>
+    <string name="menu_section_list_empty">Darn, looks like this store doesn\'t have any items.</string>
+    <string name="stores_list_empty">Oops, looks like we don\'t have any stores up.</string>
+    <string name="item_list_empty">Aw snap, looks like no items are currently available!</string>
 
 </resources>
