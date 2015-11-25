@@ -2,6 +2,7 @@ package com.productions.jalebi;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -79,12 +80,16 @@ public class MenuItemsFragment extends Fragment implements AbsListView.OnItemCli
         }
 
         mAdapter = new ArrayAdapter(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, mData) {
+                android.R.layout.simple_list_item_2, android.R.id.text1, mData) {
 
             public View getView(int position, View view, ViewGroup parent) {
                 View v = super.getView(position, view, parent);
                 TextView text1 = (TextView) v.findViewById(android.R.id.text1);
                 text1.setText(mData.get(position).getName());
+                TextView text2 = (TextView) v.findViewById(android.R.id.text2);
+                text2.setText("Rs-/ " + mData.get(position).getPrice() + " per " + mData.get(position).getPriceUnit());
+                text2.setTextColor(getResources().getColor(R.color.LightSeaGreen));
+                text2.setTypeface(Typeface.DEFAULT_BOLD);
                 return v;
             }
         };
