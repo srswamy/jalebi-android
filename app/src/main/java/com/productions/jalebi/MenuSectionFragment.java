@@ -105,6 +105,9 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+        // Set the listview empty view
+        mListView.setEmptyView(view.findViewById(android.R.id.empty));
+
         return view;
     }
 
@@ -167,12 +170,15 @@ public class MenuSectionFragment extends Fragment implements AbsListView.OnItemC
 
     private void parseJSONResponse(JSONArray response) {
         try {
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject obj = (JSONObject) response.get(i);
-                // TODO: Update location information
-                Section section = new Section(obj.getInt("id"), obj.getString("name"));
-                mData.add(section);
-                ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+            if (response.length() != 0) {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject obj = (JSONObject) response.get(i);
+                    Section section = new Section(obj.getInt("id"), obj.getString("name"));
+                    mData.add(section);
+                    ((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
+                }
+            } else {
+                setEmptyText(getResources().getText(R.string.menu_section_list_empty));
             }
         } catch (JSONException e) {
             // TODO: Proper exception handling + error messaging
